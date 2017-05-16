@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.os.Message;
 import android.os.SystemClock;
 import android.util.Log;
 import android.widget.Toast;
@@ -18,13 +19,23 @@ public class MainActivity extends Activity {
     private static String TAG = "Sample activity";
 
     private AsyncTaskImp1 mAsyncTask;
+    private Handler mHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mAsyncTask = new AsyncTaskImp1();
-        mAsyncTask.execute("test1", "test444");
+        //mAsyncTask = new AsyncTaskImp1();
+        //mAsyncTask.execute("test1", "test444");
+        mHandler = new Handler(new HandlerCallbackImp1());
+        mHandler.sendEmptyMessage(100500);
+
+        Message msg = Message.obtain();
+        msg.what = 42;
+        msg.arg1 = 24;
+
+        mHandler.sendMessage(msg);
+
     }
 
     @Override
@@ -50,6 +61,15 @@ public class MainActivity extends Activity {
         super.onDestroy();
         Log.e("Sample activity", "onDestroy() " + Thread.currentThread().getId());
         mAsyncTask.cancel(false);
+    }
+
+    private class HandlerCallbackImp1 implements Handler.Callback {
+
+        @Override
+        public boolean handleMessage(Message msg) {
+            Log.e(TAG, "message = " + msg);
+            return false;
+        }
     }
 
     private class AsyncTaskImp1 extends AsyncTask<String, Integer, Double> {
