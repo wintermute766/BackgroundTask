@@ -24,7 +24,6 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
         //mAsyncTask = new AsyncTaskImp1();
         //mAsyncTask.execute("test1", "test444");
         mHandler = new Handler(new HandlerCallbackImp1());
@@ -33,8 +32,10 @@ public class MainActivity extends Activity {
         Message msg = Message.obtain();
         msg.what = 42;
         msg.arg1 = 24;
-
+        msg.arg2 = 1;
         mHandler.sendMessage(msg);
+
+        mHandler.removeMessages(42);
 
     }
 
@@ -67,6 +68,14 @@ public class MainActivity extends Activity {
 
         @Override
         public boolean handleMessage(Message msg) {
+            switch (msg.what) {
+                case 42: {
+                    break;
+                }
+                case 100500: {
+                    break;
+                }
+            }
             Log.e(TAG, "message = " + msg);
             return false;
         }
